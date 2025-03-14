@@ -10,14 +10,31 @@ export async function loadCommands(client: Client) {
     (client as any).commands = new Collection();
   }
 
-  // Get directory paths
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const commandsPath = path.join(__dirname, "..", "commands");
-
   const isDebugMode = process.env.DEBUG === "true";
 
   try {
+    // Get directory paths
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    // Detect if we're running from source or built code
+    const isBuiltCode = __dirname.includes(".syntax");
+
+    // Set up paths based on where we're running from
+    let commandsPath;
+
+    if (isBuiltCode) {
+      // If running from built code (.syntax), use the .syntax/commands directory
+      commandsPath = path.join(process.cwd(), ".syntax", "commands");
+    } else {
+      // If running from source code, use the src/commands directory
+      commandsPath = path.join(process.cwd(), "src", "commands");
+    }
+
+    if (isDebugMode) {
+      logger.debug(`Looking for commands in: ${commandsPath}`);
+    }
+
     // Check if directory exists
     if (!fs.existsSync(commandsPath)) {
       logger.error(`Commands directory not found: ${commandsPath}`);

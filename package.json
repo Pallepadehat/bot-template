@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "start": "bun run src/index.ts"
+    "build": "bun run scripts/build.ts",
+    "start": "bun run .syntax/index.js",
+    "start:dev": "bun run dev",
+    "start:prod": "bun run build && bun run start"
   },
   "devDependencies": {
     "@prisma/client": "^6.5.0",

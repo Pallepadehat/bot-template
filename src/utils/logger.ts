@@ -28,10 +28,13 @@ const timestamp = () => {
 
 // Add this interface before the logger object
 interface DiscordAPIError {
+  code?: number;
   rawError?: {
     message: string;
     code: number;
   };
+  message?: string;
+  stack?: string;
 }
 
 // Logger functions
@@ -57,13 +60,17 @@ export const logger = {
   error: (message: string, ...args: any[]) => {
     // Check if this is a Discord API Error
     const error = args[0];
-    if (error && typeof error === "object" && "rawError" in error) {
-      const discordError = error as DiscordAPIError;
+    if (error && typeof error === "object") {
+      // Check both direct code and nested rawError code
+      const errorCode = error.code || error.rawError?.code;
+      const errorMessage = error.message || error.rawError?.message;
+
+      // Filter out Unknown Interaction errors (10062)
       if (
-        discordError.rawError?.code === 10062 &&
-        discordError.rawError?.message === "Unknown interaction"
+        errorCode === 10062 &&
+        errorMessage?.includes("Unknown interaction")
       ) {
-        return; // Silently ignore this specific error
+        return; // Skip logging this error completely
       }
     }
 

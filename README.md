@@ -100,7 +100,7 @@ bun run start
 ```
 src/
 ├── commands/             # Command files
-│   └── ping.ts           # Example ping replies with pong
+│   └── note.ts           # Example command with database intergration
 │
 ├── events/               # Event handler files
 │   ├── interactionCreate.ts   # Handles incoming command interactions

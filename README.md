@@ -126,7 +126,6 @@ yarn start:prod
 ```
 src/
 ├── commands/             # Command files
-│   ├── ping.ts          # Basic ping command
 │   └── note.ts          # Database-integrated notes system
 ├── events/              # Event handlers
 ├── handlers/            # Core logic
@@ -135,10 +134,6 @@ src/
 ```
 
 ## 🗃️ Available Commands
-
-### 🏓 Ping
-
-- `/ping` - Check bot latency
 
 ### 📝 Notes
 

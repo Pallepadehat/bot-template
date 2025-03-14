@@ -5,10 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "build": "bun run scripts/build.ts",
-    "start": "bun run .syntax/index.js"
+    "start": "bun run src/index.ts"
   },
   "devDependencies": {
+    "@prisma/client": "^6.5.0",
     "@types/bun": "latest"
   },
   "peerDependencies": {
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "discord.js": "^14.18.0",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "prisma": "^6.5.0"
   }
 }

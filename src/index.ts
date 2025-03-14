@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import { loadCommands } from "./handlers/commandHandler";
 import { loadEvents } from "./handlers/eventHandler";
 import { logger } from "./utils/logger";
+import { RestartHandler } from "./utils/restartHandler";
 
 // Load environment variables
 config();
@@ -60,14 +61,31 @@ async function initBot() {
   }
 }
 
+// After client is created and before event handlers
+client.once("ready", () => {
+  RestartHandler.initialize(client);
+});
+
 // Handle process events for better error handling and logging
 process.on("unhandledRejection", (error) => {
   logger.error("Unhandled promise rejection:", error);
+  RestartHandler.restartBot(`Unhandled Promise Rejection: ${error}`);
 });
 
 process.on("uncaughtException", (error) => {
   logger.error("Uncaught exception:", error);
-  process.exit(1);
+  RestartHandler.restartBot(`Uncaught Exception: ${error}`);
+});
+
+// Add additional crash handlers
+process.on("SIGINT", () => {
+  logger.info("Received SIGINT. Bot is shutting down...");
+  process.exit(0);
+});
+
+process.on("SIGTERM", () => {
+  logger.info("Received SIGTERM. Bot is shutting down...");
+  process.exit(0);
 });
 
 // Initialize the bot

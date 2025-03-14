@@ -32,8 +32,8 @@ A modern, TypeScript-based Discord bot template with a clean modular architectur
 1. **Clone this repository**
 
 ```bash
-git clone https://github.com/yourusername/discord-bot-template.git
-cd discord-bot-template
+git clone https://github.com/Pallepadehat/bot-template.git
+cd bot-template
 ```
 
 2. **Install dependencies**
@@ -100,8 +100,7 @@ bun run start
 ```
 src/
 ├── commands/             # Command files
-│   ├── info.ts           # Example info command with subcommands
-│   └── ping.ts           # Example ping command with latency info
+│   └── ping.ts           # Example ping replies with pong
 │
 ├── events/               # Event handler files
 │   ├── interactionCreate.ts   # Handles incoming command interactions
@@ -168,6 +167,16 @@ export async function execute(member: GuildMember) {
   }
 }
 ```
+
+## 🔄 Auto-Restart System
+
+The bot includes an automatic restart system that helps maintain uptime:
+
+- Automatically restarts on crashes or unhandled errors
+- Maximum of 5 restart attempts within 1 minute
+- 5-second delay between restart attempts
+- Intelligent restart tracking to prevent rapid restart loops
+- Graceful shutdown handling for SIGINT and SIGTERM signals
 
 ## 🛠️ Debug Mode
 

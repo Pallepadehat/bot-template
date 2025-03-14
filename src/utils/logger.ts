@@ -26,6 +26,14 @@ const timestamp = () => {
   return now.toISOString();
 };
 
+// Add this interface before the logger object
+interface DiscordAPIError {
+  rawError?: {
+    message: string;
+    code: number;
+  };
+}
+
 // Logger functions
 export const logger = {
   info: (message: string, ...args: any[]) => {
@@ -47,6 +55,18 @@ export const logger = {
   },
 
   error: (message: string, ...args: any[]) => {
+    // Check if this is a Discord API Error
+    const error = args[0];
+    if (error && typeof error === "object" && "rawError" in error) {
+      const discordError = error as DiscordAPIError;
+      if (
+        discordError.rawError?.code === 10062 &&
+        discordError.rawError?.message === "Unknown interaction"
+      ) {
+        return; // Silently ignore this specific error
+      }
+    }
+
     console.error(
       `${colors.red}[ERROR]${colors.reset} ${colors.dim}${timestamp()}${
         colors.reset
